@@ -1,48 +1,36 @@
 class LinkedList {
   append(value) {
     const newNode = { value, next: null };
-    // if the list is empty, set the head and tail to the new node
     if (!this.head) {
       this.head = newNode;
     }
-
-    // if tail exists, set tail.next to newNode
     if (this.tail) {
       this.tail.next = newNode;
     }
-
-    // Update the tail to the new node
     this.tail = newNode;
   }
-  // time complexity: O(n)
-  // space complexity: O(n)
 
   prepend(value) {
     const newNode = { value, next: null };
-    // if the list is empty, set the head and tail to the new node
     if (this.head) {
       newNode.next = this.head;
     }
-
     this.head = newNode;
-
     if (!this.tail) {
       this.tail = newNode;
     }
   }
 
   remove(value) {
-    // if the list is empty, return
-    if (!this.head) {
-      return;
-    }
+    if (!this.head) return;
 
+    // remove from head
     while (this.head && this.head.value === value) {
       this.head = this.head.next;
     }
 
     let curNode = this.head;
-    while (curNode.next) {
+    while (curNode && curNode.next) {
       if (curNode.next.value === value) {
         curNode.next = curNode.next.next;
       } else {
@@ -50,7 +38,7 @@ class LinkedList {
       }
     }
 
-    if (this.tail.value === value) {
+    if (this.tail && this.tail.value === value) {
       this.tail = curNode;
     }
   }
@@ -67,6 +55,27 @@ class LinkedList {
     if (existingNode) {
       const newNode = { value, next: existingNode.next };
       existingNode.next = newNode;
+      if (existingNode === this.tail) {
+        this.tail = newNode;
+      }
+    }
+  }
+
+  insertBefore(value, beforeValue) {
+    if (!this.head) return;
+
+    if (this.head.value === beforeValue) {
+      return this.prepend(value);
+    }
+
+    let curNode = this.head;
+    while (curNode.next) {
+      if (curNode.next.value === beforeValue) {
+        const newNode = { value, next: curNode.next };
+        curNode.next = newNode;
+        return;
+      }
+      curNode = curNode.next;
     }
   }
 
@@ -75,11 +84,9 @@ class LinkedList {
     if (!this.head) {
       this.head = newNode;
     }
-
     if (this.tail) {
       this.tail.next = newNode;
     }
-
     this.tail = newNode;
   }
 
@@ -92,17 +99,4 @@ class LinkedList {
     }
     return elements;
   }
-}
-
-const linkedList = new LinkedList();
-linkedList.append("Bentil");
-// prepend
-linkedList.prepend("John");
-
-// remove
-linkedList.remove("Bentil");
-
-linkedList.insertBefore("Minash", "John");
-linkedList.insertAtTail("Bentil");
-
-console.log(linkedList.print());
+      }
